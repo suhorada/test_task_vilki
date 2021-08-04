@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const vilkaRouter = require('./routes/vilka');
+const categoryRouter = require('./routes/category');
 
 const app = express();
 
@@ -17,5 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/vilka', vilkaRouter);
+app.use('/category', categoryRouter);
 
 module.exports = app;

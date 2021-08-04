@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   Vilka.init({
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
-    year: DataTypes.DATE,
+    year: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
     category_id: DataTypes.INTEGER,
   }, {

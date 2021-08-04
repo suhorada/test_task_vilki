@@ -14,18 +14,20 @@ const list = async (req, res) => {
 };
 
 const postVilka = async (req, res) => {
-  console.log(req.query);
   try {
     const categoryExist = await Category.findOne({ where: { name: req.query.category } });
     if (!categoryExist) {
+      // create vilka + category + user
       // Vilka.create({})
+      res.status(201).send({ categoryExist });
     } else {
-      //
+      // create vilka + user
+      res.status(201).send({ categoryExist });
     }
   } catch (err) {
     res.status(400).send(err);
   }
-  res.status(200).send('response');
+  // res.status(200).send('response');
 };
 
 module.exports = {

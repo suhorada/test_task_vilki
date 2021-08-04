@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
   User.associate = (models) => {
-    // User.hasMany(models.News, {
-    //   foreignKey: 'user_id',
-    // });
+    User.hasMany(models.Vilka, {
+      foreignKey: 'user_id',
+    });
   };
   return User;
 };

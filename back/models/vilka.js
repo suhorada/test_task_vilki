@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Vilka.belongsTo(models.Category, {
+        foreignKey: 'category_id',
+      });
+      Vilka.belongsTo(models.User, {
+        foreignKey: 'user_id',
+      });
     }
   }
   Vilka.init({
@@ -18,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     year: DataTypes.DATE,
     user_id: DataTypes.INTEGER,
+    category_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Vilka',

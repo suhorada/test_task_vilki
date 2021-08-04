@@ -32,11 +32,11 @@ const createUser = async (req, res) => {
           password: req.body.password,
         });
       const token = jwt.sign(
-        JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+        JSON.parse(JSON.stringify({ login: user.login })),
         process.env.secret, { expiresIn: process.env.tokenLife },
       );
       const refreshToken = jwt.sign(
-        JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+        JSON.parse(JSON.stringify({ login: user.login })),
         process.env.refreshSecret, { expiresIn: process.env.refreshTokenLife },
       );
       const resp = { success: true, token, refreshToken };
@@ -64,11 +64,11 @@ const login = async (req, res) => {
     user.comparePassword(req.body.password, user.password, (err, isMatch) => {
       if (isMatch && !err) {
         const token = jwt.sign(
-          JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+          JSON.parse(JSON.stringify({ login: user.login })),
           process.env.secret, { expiresIn: process.env.tokenLife },
         );
         const refreshToken = jwt.sign(
-          JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+          JSON.parse(JSON.stringify({ login: user.login })),
           process.env.refreshSecret, { expiresIn: process.env.refreshTokenLife },
         );
         Refresh.create({ token: refreshToken });
@@ -105,7 +105,6 @@ const authenticateMiddleware = (req, res, next) => {
 // body = {refreshToken, email, login}
 const updateToken = async (req, res) => {
   const postData = req.body;
-  console.log(postData);
   let foundToken;
   try {
     foundToken = await Refresh.findOne({ where: { token: postData.refreshToken }, order: [['createdAt', 'DESC']] });
@@ -114,7 +113,6 @@ const updateToken = async (req, res) => {
   }
   if ((postData.refreshToken) && (foundToken)) {
     const user = {
-      email: postData.email,
       login: postData.login,
     };
     const token = jwt.sign(user, process.env.secret, { expiresIn: process.env.tokenLife });

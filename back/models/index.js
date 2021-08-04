@@ -35,6 +35,6 @@ db.Sequelize = Sequelize;
 
 // This code needs to init tables in DB, but be careful,
 // if tables are exists and have an data - data will be removed
-sequelize.sync({ force: true });
+// sequelize.sync({ force: true });
 
 module.exports = db;

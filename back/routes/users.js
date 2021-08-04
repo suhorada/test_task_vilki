@@ -8,5 +8,7 @@ const router = express.Router();
 //   res.send('respond with a resource');
 // });
 router.get('/', userController.list);
+router.post('/signup', userController.createUser);
+router.post('/login', userController.login);
 
 module.exports = router;

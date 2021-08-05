@@ -1,7 +1,7 @@
-'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Subscribes extends Model {
     /**
@@ -10,12 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Subscribes.hasOne(models.Category, {
+        foreignKey: 'category',
+      });
+      Subscribes.hasOne(models.User, {
+        foreignKey: 'user',
+      });
     }
-  };
+  }
   Subscribes.init({
-    user: DataTypes.NUMBER,
-    category: DataTypes.NUMBER
+    user: DataTypes.INTEGER,
+    category: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Subscribes',

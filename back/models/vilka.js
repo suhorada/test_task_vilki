@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       Vilka.belongsTo(models.User, {
         foreignKey: 'user_id',
       });
+      // Vilka.hasOne(models.Subscribes, {
+      //   foreignKey: 'category',
+      // });
     }
   }
   Vilka.init({

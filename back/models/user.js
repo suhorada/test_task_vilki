@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Vilka, {
       foreignKey: 'user_id',
     });
+    // User.hasOne(models.Subscribes, {
+    //   foreignKey: 'user',
+    // });
   };
   return User;
 };

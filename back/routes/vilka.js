@@ -1,5 +1,6 @@
 const express = require('express');
 const vilkaController = require('../controllers').vilka;
+const userController = require('../controllers').user;
 
 const router = express.Router();
 
@@ -7,9 +8,9 @@ const router = express.Router();
 // router.get('/', (req, res, next) => {
 //   res.send('respond with a resource');
 // });
-router.get('/', vilkaController.list);
-router.post('/', vilkaController.postVilka);
-// router.post('/login', userController.login);
+router.get('/', userController.authenticateMiddleware, vilkaController.list);
+// router.get('/?category', userController.authenticateMiddleware, vilkaController.listByCategory);
+router.post('/', userController.authenticateMiddleware, vilkaController.postVilka);
 // router.post('/token', userController.updateToken);
 
 module.exports = router;

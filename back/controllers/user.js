@@ -1,7 +1,6 @@
+/* eslint-disable consistent-return */
 const jwt = require('jsonwebtoken');
 const { User, Refresh } = require('../models');
-
-// const tokenList = {};
 
 const list = (req, res) => User
   .findAll()
@@ -110,10 +109,8 @@ const authenticateMiddleware = (req, res, next) => {
       message: 'No token provided.',
     });
   }
-  next();
 };
 
-// body = {refreshToken, email, login}
 const updateToken = async (req, res) => {
   const postData = req.body;
   let foundToken;

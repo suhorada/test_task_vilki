@@ -8,6 +8,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const vilkaRouter = require('./routes/vilka');
 const categoryRouter = require('./routes/category');
+const subsRouter = require('./routes/subscribes');
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/vilka', vilkaRouter);
 app.use('/category', categoryRouter);
+app.use('/subs', subsRouter);
 
 module.exports = app;

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
   }, {});
-  User.beforeSave((user, options) => {
+  User.beforeSave((user) => {
     if (user.changed('password')) {
       // eslint-disable-next-line no-param-reassign
       user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
@@ -25,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Vilka, {
       foreignKey: 'user_id',
     });
-    // User.hasOne(models.Subscribes, {
-    //   foreignKey: 'user',
-    // });
+    User.hasOne(models.Subscribes, {
+      foreignKey: 'user',
+    });
   };
   return User;
 };

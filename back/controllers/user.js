@@ -123,6 +123,12 @@ const updateToken = async (req, res) => {
     const user = {
       login: postData.login,
     };
+    jwt.verify(postData.refreshToken, process.env.refreshSecret, (err, decoded) => {
+      if (err) {
+        res.status(401).json({ error: true, message: 'Unauthorized access.' });
+      }
+      user.id = decoded.id;
+    });
     const token = jwt.sign(user, process.env.secret, { expiresIn: process.env.tokenLife });
     const response = {
       token,

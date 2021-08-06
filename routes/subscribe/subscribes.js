@@ -1,10 +1,10 @@
 const express = require('express');
-const subscribeController = require('../../controllers').subscribes;
+const subscribeController = require('./subscribes.controller');
 const userController = require('../../controllers').user;
 
 const router = express.Router();
 
-router.get('/', subscribeController.findSubscribers);
+// router.get('/', subscribeController.findSubscribers);
 router.post('/', userController.authenticateMiddleware, subscribeController.createSubscribe);
 router.post('/remove', userController.authenticateMiddleware, subscribeController.unsubscribe);
 

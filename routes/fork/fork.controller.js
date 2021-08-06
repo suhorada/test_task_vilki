@@ -1,7 +1,8 @@
 const addForMailing = require('../../services/subscribe');
 const {
-  allForks, findCategoryByName, allForksInCategory, createFork, findSubscribers,
-} = require('./fork.query');
+  allForks, allForksInCategory, createFork } = require('./fork.query');
+const { findCategoryByName } = require('../category/category.query');
+const { findSubscribers } = require('../subscribe/subscribes.query');
 
 const list = async (req, res) => {
   const offset = (Number(req.query.page) - 1) * Number(process.env.PAGE_SIZE);

@@ -7,7 +7,6 @@ const findSubscribers = async (req, res) => {
   try {
     const category = await Category.findOne({ where: { name: req.query.category } });
     const users = await Subscribes.findAll({ where: { category: category.id }, attributes: ['id', 'user', 'category'], include: [{ model: User, attributes: ['login'] }] });
-    console.log('ttttttt', users);
     res.status(200).send(users);
   } catch (err) {
     res.status(400).send({ err, msg: 'oops' });

@@ -1,4 +1,7 @@
-const { Vilka, Category } = require('../models');
+const addForMailing = require('../services/subscribe');
+const {
+  User, Vilka, Category, Subscribes,
+} = require('../models');
 
 const list = async (req, res) => {
   const offset = (+req.query.page - 1) * +process.env.pageSize;
@@ -44,11 +47,21 @@ const postVilka = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
       });
+      const items = await Subscribes.findAll({
+        where: {
+          category: categoryExist.id,
+        },
+        attributes: ['id', 'user', 'category'],
+        include: [{ model: User, attributes: ['login'] }],
+      });
+      const users = items.map((el) => el.dataValues.User.dataValues.login);
+      addForMailing(categoryExist.name, users);
       res.status(201).send({ categoryExist });
     } else {
       res.status(404).send({ categoryExist, msg: 'Category not found, please, create a category' });
     }
   } catch (err) {
+    console.log(err);
     res.status(400).send(err);
   }
 };

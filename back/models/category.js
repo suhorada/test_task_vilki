@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Category.hasMany(models.Vilka, {
         foreignKey: 'category_id',
       });
+      Category.hasOne(models.Subscribes, {
+        foreignKey: 'category',
+      });
     }
   }
   Category.init({

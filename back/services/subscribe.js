@@ -1,48 +1,27 @@
-const tasks = [1, 2, 3, 4, 5, 6, 7];
+const queue = [];
 
-function receive() {
-  tasks.push('a');
-  console.log(tasks);
-}
+const send = (category, user) => new Promise((resolve) => setTimeout(() => {
+  console.log(`Fork ${category} was created, ${user}!`);
+  resolve();
+}, 1000));
 
-function send() {
-  console.log(tasks.shift());
-}
-
-function sender() {
-  let run = true;
-  setInterval(() => {
-    if (run) {
-      send();
-      if (!tasks.length) {
-        run = false;
-      }
-    }
-  }, 1000);
-}
-
-// one receive with users array
-// receive();
-// receive();
-// receive();
-// receive();
-// one receive with users array
-// sender();
-
-const queue = (type, array) => new Promise((res) => setTimeout(() => {
-  const requests = [];
-  while (array.length) {
-    setTimeout(() => {
-      const temp = array.shift();
-      requests.push(new Promise((resolve) => {
-        console.log(type, ' to ', temp);
-        resolve();
-      }));
-    }, 1000);
+const notify = async () => {
+  const currentItem = queue[0];
+  if (currentItem) {
+    await Promise.all(currentItem.users.map((user) => send(currentItem.category, user)));
+    queue.shift();
   }
-  res();
-}, 500));
+  if (queue.length !== 0) notify();
+};
 
-queue('asd', tasks);
+const addForMailing = (category, users) => {
+  queue.push({
+    category,
+    users,
+  });
+  if (queue.length === 1) {
+    notify();
+  }
+};
 
-exports = { tasks, receive, send };
+module.exports = addForMailing;

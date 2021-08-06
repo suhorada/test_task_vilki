@@ -3,7 +3,7 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Fork extends Model {
+  class Frok extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,18 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Fork.belongsTo(models.Category, {
+      Frok.belongsTo(models.Category, {
         foreignKey: 'category_id',
       });
-      Fork.belongsTo(models.User, {
+      Frok.belongsTo(models.User, {
         foreignKey: 'user_id',
       });
-      Fork.hasOne(models.Subscribes, {
+      Frok.hasOne(models.Subscribes, {
         foreignKey: 'category',
       });
     }
   }
-  Fork.init({
+  Frok.init({
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
     year: DataTypes.INTEGER,
@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Fork',
+    tableName: 'Vilkas',
   });
-  return Fork;
+  return Frok;
 };

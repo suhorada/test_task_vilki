@@ -1,11 +1,8 @@
 const addForMailing = require('../services/subscribe');
-const {
-  User, Fork, Category, Subscribes,
-} = require('../models');
 
 const list = async (req, res) => {
-  const offset = (+req.query.page - 1) * +process.env.PAGE_SIZE;
-  const limit = +process.env.PAGE_SIZE;
+  const offset = (Number(req.query.page) - 1) * Number(process.env.PAGE_SIZE);
+  const limit = Number(process.env.PAGE_SIZE);
   if (!req.query.category) {
     let response;
     try {
@@ -35,11 +32,16 @@ const list = async (req, res) => {
     } else res.status(404).send(`Category ${req.query.category} not found`);
   }
 };
+// ------------------------
+// ------------------------
+// ------------------------
 
 const postFork = async (req, res) => {
   try {
+    // ------------------------
     const categoryExist = await Category.findOne({ where: { name: req.query.category } });
     if (categoryExist) {
+      // ------------------------
       Fork.create({
         user_id: req.decoded.id,
         category_id: categoryExist.id,
@@ -47,6 +49,7 @@ const postFork = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
       });
+      // ------------------------
       const items = await Subscribes.findAll({
         where: {
           category: categoryExist.id,

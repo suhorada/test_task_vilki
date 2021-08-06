@@ -1,5 +1,5 @@
 const express = require('express');
-const forkController = require('../../controllers').fork;
+const forkController = require('./fork.controller');
 const userController = require('../../controllers').user;
 
 const router = express.Router();

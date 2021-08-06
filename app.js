@@ -5,10 +5,6 @@ const logger = require('morgan');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const forkRouter = require('./routes/fork');
-const categoryRouter = require('./routes/category');
-const subsRouter = require('./routes/subscribes');
 
 const app = express();
 
@@ -19,9 +15,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/user', usersRouter);
-app.use('/fork', forkRouter);
-app.use('/category', categoryRouter);
-app.use('/subs', subsRouter);
 
 module.exports = app;

@@ -4,8 +4,8 @@ const userController = require('../controllers').user;
 
 const router = express.Router();
 
+router.get('/', subscribeController.findSubscribers);
 router.post('/', userController.authenticateMiddleware, subscribeController.createSubscribe);
 router.post('/remove', userController.authenticateMiddleware, subscribeController.unsubscribe);
-router.get('/', subscribeController.findSubscribers);
 
 module.exports = router;

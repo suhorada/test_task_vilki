@@ -26,7 +26,7 @@ const createSubscribe = async (req, res) => {
       where: { user: req.decoded.id, category: category.id },
     });
     if (isSubscribed) {
-      res.status(200).send({ msg: `You're already subscribet on category '${req.query.category}'` });
+      res.status(200).send({ msg: `You're already subscribe on category '${req.query.category}'` });
     } else {
       const response = await Subscribes.create({ user: req.decoded.id, category: category.id });
       res.status(201).send(response);

@@ -10,17 +10,12 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Subscribes.hasOne(models.Category, {
-      //   foreignKey: 'category',
-      // });
       Subscribes.belongsTo(models.User, {
         foreignKey: 'user',
       });
     }
   }
   Subscribes.init({
-    // user: DataTypes.INTEGER,
-    // category: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Subscribes',

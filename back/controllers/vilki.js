@@ -61,7 +61,6 @@ const postVilka = async (req, res) => {
       res.status(404).send({ categoryExist, msg: 'Category not found, please, create a category' });
     }
   } catch (err) {
-    console.log(err);
     res.status(400).send(err);
   }
 };

@@ -1,6 +1,6 @@
 const express = require('express');
-const subscribeController = require('../controllers').subscribes;
-const userController = require('../controllers').user;
+const subscribeController = require('../../controllers').subscribes;
+const userController = require('../../controllers').user;
 
 const router = express.Router();
 

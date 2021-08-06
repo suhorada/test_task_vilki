@@ -4,8 +4,8 @@ const {
 } = require('../models');
 
 const list = async (req, res) => {
-  const offset = (+req.query.page - 1) * +process.env.pageSize;
-  const limit = +process.env.pageSize;
+  const offset = (+req.query.page - 1) * +process.env.PAGE_SIZE;
+  const limit = +process.env.PAGE_SIZE;
   if (!req.query.category) {
     let response;
     try {

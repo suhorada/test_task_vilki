@@ -16,6 +16,7 @@ const createUser = async (req, res) => {
   let alreadyCreatedEmail = false;
 
   try {
+    // ||
     response = await User.findOne({ where: { login: req.body.login } });
     responseEmail = await User.findOne({ where: { email: req.body.email } });
   } catch (err) {
@@ -38,11 +39,11 @@ const createUser = async (req, res) => {
 
       const token = jwt.sign(
         JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-        process.env.secret, { expiresIn: process.env.tokenLife },
+        process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE },
       );
       const refreshToken = jwt.sign(
         JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-        process.env.refreshSecret, { expiresIn: process.env.refreshTokenLife },
+        process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE },
       );
 
       const resp = { success: true, token, refreshToken };
@@ -74,11 +75,11 @@ const login = async (req, res) => {
       if (isMatch && !err) {
         const token = jwt.sign(
           JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-          process.env.secret, { expiresIn: process.env.tokenLife },
+          process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE },
         );
         const refreshToken = jwt.sign(
           JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-          process.env.refreshSecret, { expiresIn: process.env.refreshTokenLife },
+          process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE },
         );
         const response = { success: true, token, refreshToken };
 
@@ -96,7 +97,7 @@ const login = async (req, res) => {
 const authenticateMiddleware = (req, res, next) => {
   const token = req.body.token || req.query.token || req.headers['jwt-access-token'];
   if (token) {
-    jwt.verify(token, process.env.secret, (err, decoded) => {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({ error: true, message: 'Unauthorized access.' });
       }
@@ -123,13 +124,13 @@ const updateToken = async (req, res) => {
     const user = {
       login: postData.login,
     };
-    jwt.verify(postData.refreshToken, process.env.refreshSecret, (err, decoded) => {
+    jwt.verify(postData.refreshToken, process.env.REFRESH_SECRET, (err, decoded) => {
       if (err) {
         res.status(401).json({ error: true, message: 'Unauthorized access.' });
       }
       user.id = decoded.id;
     });
-    const token = jwt.sign(user, process.env.secret, { expiresIn: process.env.tokenLife });
+    const token = jwt.sign(user, process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE });
     const response = {
       token,
     };

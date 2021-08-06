@@ -6,12 +6,14 @@ const send = (category, user) => new Promise((resolve) => setTimeout(() => {
 }, 1000));
 
 const notify = async () => {
-  const currentItem = queue[0];
-  if (currentItem) {
-    await Promise.all(currentItem.users.map((user) => send(currentItem.category, user)));
-    queue.shift();
+  while (queue.length !== 0) {
+    const currentItem = queue[0];
+    if (currentItem) {
+      // eslint-disable-next-line no-await-in-loop
+      await Promise.all(currentItem.users.map((user) => send(currentItem.category, user)));
+      queue.shift();
+    }
   }
-  if (queue.length !== 0) notify();
 };
 
 const addForMailing = (category, users) => {

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const vilkaRouter = require('./routes/vilka');
+const forkRouter = require('./routes/fork');
 const categoryRouter = require('./routes/category');
 const subsRouter = require('./routes/subscribes');
 
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
-app.use('/vilka', vilkaRouter);
+app.use('/fork', forkRouter);
 app.use('/category', categoryRouter);
 app.use('/subs', subsRouter);
 

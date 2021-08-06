@@ -1,6 +1,6 @@
 const addForMailing = require('../services/subscribe');
 const {
-  User, Vilka, Category, Subscribes,
+  User, Fork, Category, Subscribes,
 } = require('../models');
 
 const list = async (req, res) => {
@@ -9,7 +9,7 @@ const list = async (req, res) => {
   if (!req.query.category) {
     let response;
     try {
-      response = await Vilka.findAll({ limit, offset });
+      response = await Fork.findAll({ limit, offset });
     } catch (err) {
       if (!offset || !limit) {
         res.status(400).send({ msg: 'Page not found in query' });
@@ -23,7 +23,7 @@ const list = async (req, res) => {
     let response;
     if (category) {
       try {
-        response = await Vilka.findAll({ where: { category_id: category.id }, limit, offset });
+        response = await Fork.findAll({ where: { category_id: category.id }, limit, offset });
         res.status(200).send(response);
       } catch (err) {
         if (!offset || !limit) {
@@ -36,11 +36,11 @@ const list = async (req, res) => {
   }
 };
 
-const postVilka = async (req, res) => {
+const postFork = async (req, res) => {
   try {
     const categoryExist = await Category.findOne({ where: { name: req.query.category } });
     if (categoryExist) {
-      Vilka.create({
+      Fork.create({
         user_id: req.decoded.id,
         category_id: categoryExist.id,
         year: req.body.year,
@@ -67,5 +67,5 @@ const postVilka = async (req, res) => {
 
 module.exports = {
   list,
-  postVilka,
+  postFork,
 };

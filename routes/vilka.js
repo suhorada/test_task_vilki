@@ -1,10 +1,10 @@
 const express = require('express');
-const vilkaController = require('../controllers').vilka;
+const forkController = require('../controllers').fork;
 const userController = require('../controllers').user;
 
 const router = express.Router();
 
-router.get('/', userController.authenticateMiddleware, vilkaController.list);
-router.post('/', userController.authenticateMiddleware, vilkaController.postVilka);
+router.get('/', userController.authenticateMiddleware, forkController.list);
+router.post('/', userController.authenticateMiddleware, forkController.postFork);
 
 module.exports = router;

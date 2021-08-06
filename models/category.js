@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Category.hasMany(models.Vilka, {
+      Category.hasMany(models.Fork, {
         foreignKey: 'category_id',
       });
       Category.hasOne(models.Subscribes, {

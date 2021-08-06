@@ -3,7 +3,7 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Vilka extends Model {
+  class Fork extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,18 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Vilka.belongsTo(models.Category, {
+      Fork.belongsTo(models.Category, {
         foreignKey: 'category_id',
       });
-      Vilka.belongsTo(models.User, {
+      Fork.belongsTo(models.User, {
         foreignKey: 'user_id',
       });
-      Vilka.hasOne(models.Subscribes, {
+      Fork.hasOne(models.Subscribes, {
         foreignKey: 'category',
       });
     }
   }
-  Vilka.init({
+  Fork.init({
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
     year: DataTypes.INTEGER,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     category_id: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'Vilka',
+    modelName: 'Fork',
   });
-  return Vilka;
+  return Fork;
 };

@@ -1,11 +1,11 @@
 const user = require('./user');
-const vilka = require('./vilki');
+const fork = require('./forks');
 const category = require('./category');
 const subscribes = require('./subscribes');
 
 module.exports = {
   user,
-  vilka,
+  fork,
   category,
   subscribes,
 };

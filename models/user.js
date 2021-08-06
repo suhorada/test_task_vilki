@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
   User.associate = (models) => {
-    User.hasMany(models.Vilka, {
+    User.hasMany(models.Fork, {
       foreignKey: 'user_id',
     });
     User.hasOne(models.Subscribes, {

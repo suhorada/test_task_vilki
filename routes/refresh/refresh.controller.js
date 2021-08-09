@@ -7,19 +7,16 @@ const refreshTokens = async (req, res) => {
   let newRefreshToken;
   try {
     foundToken = await findToken(refreshToken);
-    const user = {};
     if (refreshToken && foundToken) {
       const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
-      user.login = decoded.login;
-      user.id = decoded.id;
       await foundToken.destroy();
       newRefreshToken = jwt.sign(
-        { id: user.id, login: user.login },
+        { id: decoded.id, login: decoded.login },
         process.env.REFRESH_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_LIFE },
       );
       await createRefresh(newRefreshToken);
-      const token = jwt.sign(user, process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE });
+      const token = jwt.sign({ id: decoded.id, login: decoded.login }, process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE });
       const response = { token, newRefreshToken };
       res.status(200).json(response);
     } else {

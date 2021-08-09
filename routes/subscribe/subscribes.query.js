@@ -12,7 +12,6 @@ const createSubscribe = (userId, categoryId) => Subscribes
   .create({ user: userId, category: categoryId });
 const removeSubscribe = (subscribe) => subscribe.destroy();
 
-// findCategory();
 module.exports = {
   findSubscribers,
   userSubscribeExist,

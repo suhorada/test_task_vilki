@@ -20,11 +20,11 @@ const postUser = async (req, res) => {
       const user = await createUser(login, email, password);
 
       const token = jwt.sign(
-        JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+        { id: user.id, login: user.login },
         process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE },
       );
       const refreshToken = jwt.sign(
-        JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
+        { id: user.id, login: user.login },
         process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE },
       );
 
@@ -70,37 +70,7 @@ const signIn = async (req, res) => {
   }
 };
 
-// const updateToken = async (req, res) => {
-//   const { refreshToken } = req.body;
-//   let foundToken;
-//   let newRefreshToken;
-//   try {
-//     foundToken = await findToken(refreshToken);
-//     const user = {};
-//     if (refreshToken && foundToken) {
-//       const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
-//       user.login = decoded.login;
-//       user.id = decoded.id;
-//       await foundToken.destroy();
-//       newRefreshToken = jwt.sign(
-//         { id: user.id, login: user.login },
-//         process.env.REFRESH_SECRET,
-//         { expiresIn: process.env.REFRESH_TOKEN_LIFE },
-//       );
-//       await createRefresh(newRefreshToken);
-//       const token = jwt.sign(user, process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE });
-//       const response = { token, newRefreshToken };
-//       res.status(200).json(response);
-//     } else {
-//       res.status(404).send({ msg: 'Token not found' });
-//     }
-//   } catch (err) {
-//     res.status(400).send({ msg: 'Bad request', err });
-//   }
-// };
-
 module.exports = {
   postUser,
   signIn,
-  // updateToken,
 };

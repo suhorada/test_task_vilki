@@ -14,7 +14,6 @@ const subscribe = async (req, res) => {
     if (!foundCategory) {
       res.status(404).send({ msg: `Category '${categoryId}' not found` });
     }
-
     const isSubscribed = await userSubscribeExist(id, foundCategory.id);
     if (isSubscribed) {
       res.status(200).send({ msg: `You're already subscribe on category '${foundCategory.name}'` });

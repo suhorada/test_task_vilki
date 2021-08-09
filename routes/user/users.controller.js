@@ -71,19 +71,20 @@ const signIn = async (req, res) => {
 };
 
 const updateToken = async (req, res) => {
-  const { refreshToken, login } = req.body;
+  const { refreshToken } = req.body;
   let foundToken;
   let newRefreshToken;
   try {
     foundToken = await findToken(refreshToken);
+    const user = {};
     if (refreshToken && foundToken) {
-      const user = { login };
       jwt.verify(refreshToken, process.env.REFRESH_SECRET, async (err, decoded) => {
+        user.login = decoded.login;
+        user.id = decoded.id;
         if (err) {
           res.status(401).json({ msg: 'Unauthorized access.' });
         }
         await foundToken.destroy();
-        user.id = decoded.id;
       });
       newRefreshToken = jwt.sign(
         JSON.parse(JSON.stringify({ id: user.id, login: user.login })),

@@ -1,6 +1,6 @@
 const addForMailing = require('../../services/subscribe');
 const { allForks, allForksInCategory, createFork } = require('./fork.query');
-const { findCategoryByName } = require('../category/category.query');
+const { findCategory, findCategoryByName } = require('../category/category.query');
 const { findSubscribers } = require('../subscribe/subscribes.query');
 
 const list = async (req, res) => {
@@ -8,12 +8,11 @@ const list = async (req, res) => {
   const offset = (Number(page) - 1) * Number(process.env.PAGE_SIZE);
   const limit = Number(process.env.PAGE_SIZE);
   try {
-    const { name } = req.body;
     if (!category) {
       const response = await allForks(limit, offset);
       res.status(200).send(response);
     } else {
-      const foundCategory = await findCategoryByName(name);
+      const foundCategory = await findCategory(category);
       let response;
       if (foundCategory) {
         response = await allForksInCategory(foundCategory.id, limit, offset);
@@ -21,9 +20,7 @@ const list = async (req, res) => {
       } else res.status(404).send(`Category ${category} not found`);
     }
   } catch (err) {
-    if (typeof offset !== 'number' || typeof limit !== 'number') {
-      res.status(404).send({ msg: 'Page not found in query' });
-    } else if (!offset || !limit) {
+    if (!offset || !limit) {
       res.status(404).send({ msg: 'Page not found in query' });
     } else {
       res.status(400).send({ msg: 'Server error', error: err.toString() });
@@ -33,8 +30,9 @@ const list = async (req, res) => {
 
 const postFork = async (req, res) => {
   try {
-    const { name, year, description } = req.body;
-    const { category } = req.query;
+    const {
+      name, year, description, category,
+    } = req.body;
     const { id } = req.decoded;
     if (!category) {
       res.status(404).send({ msg: 'Name in query not found' });

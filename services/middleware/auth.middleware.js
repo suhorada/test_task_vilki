@@ -2,20 +2,19 @@
 const jwt = require('jsonwebtoken');
 
 const authenticateMiddleware = (req, res, next) => {
-  const token = req.headers['auth-token'];
-  if (token) {
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ error: true, message: 'Unauthorized access.' });
-      }
+  try {
+    const token = req.headers['auth-token'];
+    if (token) {
+      const decoded = jwt.verify(token, process.env.SECRET);
       req.decoded = decoded;
       next();
-    });
-  } else {
-    return res.status(403).send({
-      error: true,
-      message: 'No token provided.',
-    });
+    } else {
+      return res.status(403).send({
+        msg: 'No token provided.',
+      });
+    }
+  } catch (err) {
+    return res.status(401).send({ msg: 'Unauthorized access.' });
   }
 };
 

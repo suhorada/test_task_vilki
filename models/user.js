@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   User.prototype.comparePassword = (passw, pass, cb) => {
+    console.log(passw, pass);
     bcrypt.compare(passw, pass, (err, isMatch) => {
       if (err) {
         return cb(err);

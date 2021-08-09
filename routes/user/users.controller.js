@@ -46,20 +46,20 @@ const signIn = async (req, res) => {
     if (!user) {
       res.status(404).send({ msg: `Authentication failed. User '${login}' not found.` });
     }
-
-    user.comparePassword(password, user.password, async (err, isMatch) => {
+    user.comparePassword(password, user.password, (err, isMatch) => {
       if (isMatch && !err) {
         const token = jwt.sign(
-          JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-          process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE },
+          { id: user.id, login: user.login },
+          process.env.SECRET,
+          { expiresIn: process.env.TOKEN_LIFE },
         );
         const refreshToken = jwt.sign(
-          JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-          process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE },
+          { id: user.id, login: user.login },
+          process.env.REFRESH_SECRET,
+          { expiresIn: process.env.REFRESH_TOKEN_LIFE },
         );
         const response = { token, refreshToken };
-
-        await createRefresh(refreshToken);
+        createRefresh(refreshToken);
         res.status(200).send({ msg: 'Login done', response });
       } else {
         res.status(401).send({ msg: 'Authentication failed. Wrong password.' });
@@ -78,17 +78,14 @@ const updateToken = async (req, res) => {
     foundToken = await findToken(refreshToken);
     const user = {};
     if (refreshToken && foundToken) {
-      jwt.verify(refreshToken, process.env.REFRESH_SECRET, async (err, decoded) => {
-        user.login = decoded.login;
-        user.id = decoded.id;
-        if (err) {
-          res.status(401).json({ msg: 'Unauthorized access.' });
-        }
-        await foundToken.destroy();
-      });
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+      user.login = decoded.login;
+      user.id = decoded.id;
+      await foundToken.destroy();
       newRefreshToken = jwt.sign(
-        JSON.parse(JSON.stringify({ id: user.id, login: user.login })),
-        process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE },
+        { id: user.id, login: user.login },
+        process.env.REFRESH_SECRET,
+        { expiresIn: process.env.REFRESH_TOKEN_LIFE },
       );
       await createRefresh(newRefreshToken);
       const token = jwt.sign(user, process.env.SECRET, { expiresIn: process.env.TOKEN_LIFE });

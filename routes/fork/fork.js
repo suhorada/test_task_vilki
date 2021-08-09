@@ -1,10 +1,10 @@
 const express = require('express');
+const { authenticateMiddleware } = require('../../services/auth.middleware');
 const forkController = require('./fork.controller');
-const userController = require('../../controllers').user;
 
 const router = express.Router();
 
-router.get('/', userController.authenticateMiddleware, forkController.list);
-router.post('/', userController.authenticateMiddleware, forkController.postFork);
+router.get('/', authenticateMiddleware, forkController.list);
+router.post('/', authenticateMiddleware, forkController.postFork);
 
 module.exports = router;

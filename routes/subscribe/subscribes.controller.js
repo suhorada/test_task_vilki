@@ -1,39 +1,24 @@
-const { User, Subscribes, Category } = require('../../models');
+const { findCategoryByName } = require('../category/category.query');
+const { userSubscribeExist, createSubscribe } = require('./subscribes.query');
 
-const findSubscribers = async (req, res) => {
+const subscribe = async (req, res) => {
   if (!req.query.category) {
     res.status(404).send({ msg: 'Category query not found' });
   }
   try {
-    // QUERY
-    const category = await Category.findOne({ where: { name: req.query.category } });
-    // QUERY
-    const users = await Subscribes.findAll({ where: { category: category.id }, attributes: ['id', 'user', 'category'], include: [{ model: User, attributes: ['login'] }] });
-    res.status(200).send(users);
-  } catch (err) {
-    res.status(400).send({ err, msg: 'oops' });
-  }
-};
+    const { category } = req.query;
+    const { id } = req.decoded;
 
-const createSubscribe = async (req, res) => {
-  if (!req.query.category) {
-    res.status(404).send({ msg: 'Category query not found' });
-  }
-  try {
-    // QUERY
-    const category = await Category.findOne({ where: { name: req.query.category } });
-    if (!category) {
+    const categoryExists = await findCategoryByName(category);
+    if (!categoryExists) {
       res.status(404).send({ msg: `Category '${req.query.category}' not found` });
     }
-    // QUERY
-    const isSubscribed = await Subscribes.findOne({
-      where: { user: req.decoded.id, category: category.id },
-    });
+
+    const isSubscribed = await userSubscribeExist(id, categoryExists.id);
     if (isSubscribed) {
       res.status(200).send({ msg: `You're already subscribe on category '${req.query.category}'` });
     } else {
-    // QUERY
-      const response = await Subscribes.create({ user: req.decoded.id, category: category.id });
+      const response = await createSubscribe(id, categoryExists.id);
       res.status(201).send(response);
     }
   } catch (err) {
@@ -46,29 +31,27 @@ const unsubscribe = async (req, res) => {
     res.status(404).send({ msg: 'Category query not found' });
   }
   try {
-    // QUERY
-    const category = await Category.findOne({ where: { name: req.query.category } });
-    if (!category) {
-      res.status(404).send({ msg: `Category '${req.query.category}' not found` });
+    const { category } = req.query;
+    const { id } = req.decoded;
+
+    const categoryExists = await findCategoryByName(category);
+    if (!categoryExists) {
+      res.status(404).send({ msg: `Category '${category}' not found` });
     }
-    // QUERY
-    const sub = await Subscribes.findOne({
-      where: { user: req.decoded.id, category: category.id },
-    });
-    if (sub) {
-    // QUERY
-      await sub.destroy();
-      res.status(200).send({ msg: `Subscribe ${sub.id} was removed` });
+
+    const isSubscribed = await userSubscribeExist(id, categoryExists.id);
+    if (isSubscribed) {
+      await isSubscribed.destroy();
+      res.status(200).send({ msg: `Subscribe ${isSubscribed.id} was removed` });
     } else {
-      res.status(400).send({ msg: 'Cant destroy' });
+      res.status(400).send({ msg: "Can't destroy" });
     }
   } catch (err) {
-    res.status(400).send({ err, msg: 'oops' });
+    res.status(400).send({ err, msg: 'Bad request' });
   }
 };
 
 module.exports = {
-  findSubscribers,
-  createSubscribe,
+  subscribe,
   unsubscribe,
 };

@@ -1,6 +1,5 @@
 /* eslint-disable no-return-await */
 const { User, Subscribes } = require('../../models');
-// const { findCategory } = require('../category/category.query');
 
 const findSubscribers = async (categoryId) => await Subscribes
   .findAll({

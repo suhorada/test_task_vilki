@@ -1,17 +1,16 @@
-/* eslint-disable no-return-await */
 const { User, Subscribes } = require('../../models');
 
-const findSubscribers = async (categoryId) => await Subscribes
+const findSubscribers = (categoryId) => Subscribes
   .findAll({
     where: { category: categoryId },
     attributes: ['id', 'user', 'category'],
     include: [{ model: User, attributes: ['login'] }],
   });
-const userSubscribeExist = async (userId, categoryId) => await Subscribes
+const userSubscribeExist = (userId, categoryId) => Subscribes
   .findOne({ where: { user: userId, category: categoryId } });
-const createSubscribe = async (userId, categoryId) => await Subscribes
+const createSubscribe = (userId, categoryId) => Subscribes
   .create({ user: userId, category: categoryId });
-const removeSubscribe = async (subscribe) => subscribe.destroy();
+const removeSubscribe = (subscribe) => subscribe.destroy();
 
 // findCategory();
 module.exports = {

@@ -52,7 +52,7 @@ const postFork = async (req, res) => {
       const users = items.map((el) => el.dataValues.User.dataValues.login);
       addForMailing(categoryExist.name, users);
 
-      res.status(201).send({ msg: 'Fork was created', data: response });
+      res.status(201).send(response);
     } else {
       res.status(404).send({ msg: 'Category not found, please, create a category', categoryExist });
     }

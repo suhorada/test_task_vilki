@@ -1,11 +1,10 @@
-/* eslint-disable no-return-await */
 const { Op } = require('sequelize');
 const { User } = require('../../models');
 
-const findUser = async (string) => await User
+const findUser = (string) => User
   .findOne({ where: { [Op.or]: [{ login: string }, { email: string }] } });
 
-const createUser = async (login, email, password) => await User
+const createUser = (login, email, password) => User
   .create({ login, email, password });
 
 module.exports = {

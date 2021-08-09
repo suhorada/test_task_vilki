@@ -55,38 +55,38 @@ P.P.S Если есть данные в БД они будут удалены!!!
 
 ## Api
 ### User
-* POST: localhost:3000/user/signup
+* POST: localhost:3000/v1/user/signup
 body = { login, password, email }
 
-* POST: localhost:3000/user/login
+* POST: localhost:3000/v1/user/login
 body = { login: login || email, password }
 
-* POST: localhost:3000/user/token
+* POST: localhost:3000/v1/user/token
 body = { refreshToken }
 
 ### Categories
-* POST: localhost:3000/category
+* POST: localhost:3000/v1/category
 body = { name, description }
 headers = { auth-token }
 
 ### Subscribes
-* POST: localhost:3000/subscribes/:id
+* POST: localhost:3000/v1/subscribes/:id
 headers = { auth-token }
 params = { id: categoryId }
 
-* POST: localhost:3000/subscribes/remove/:id
+* POST: localhost:3000/v1/subscribes/remove/:id
 headers = { auth-token }
 params = { id: categoryId }
 
 ### Forks
-* POST: localhost:3000/fork?category
+* POST: localhost:3000/v1/fork?category
 body = { name, description, year, category }
 headers = { auth-token }
 
-* GET: localhost:3000/fork?&page
+* GET: localhost:3000/v1/fork?&page
 headers = { auth-token }
 query: { page }
 
-* GET: localhost:3000/vilka?category&page
+* GET: localhost:3000/v1/vilka?category&page
 headers = { auth-token }
 query: { category: categoryId, page }

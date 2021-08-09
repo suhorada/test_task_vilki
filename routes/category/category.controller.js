@@ -10,7 +10,7 @@ const postCategory = async (req, res) => {
     const foundCategory = await findCategoryByName(name);
     if (!foundCategory) {
       response = await createCategory(name, description);
-      res.status(200).send({ msg: 'Category was created', data: response });
+      res.status(200).send(response);
     } else {
       res.status(200).send({ msg: `Category already exist with id ${foundCategory.id}` });
     }

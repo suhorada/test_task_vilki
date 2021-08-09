@@ -1,40 +1,33 @@
 const addForMailing = require('../../services/subscribe');
-const {
-  allForks, allForksInCategory, createFork } = require('./fork.query');
+const { allForks, allForksInCategory, createFork } = require('./fork.query');
 const { findCategoryByName } = require('../category/category.query');
 const { findSubscribers } = require('../subscribe/subscribes.query');
 
 const list = async (req, res) => {
-  const offset = (Number(req.query.page) - 1) * Number(process.env.PAGE_SIZE);
+  const { page, category } = req.query;
+  const offset = (Number(page) - 1) * Number(process.env.PAGE_SIZE);
   const limit = Number(process.env.PAGE_SIZE);
-  const { name } = req.body;
-  if (!req.query.category) {
-    let response;
-    try {
-      response = await allForks(limit, offset);
-    } catch (err) {
-      if (typeof offset !== 'number' || typeof limit !== 'number') {
-        res.status(400).send({ msg: 'Page not found in query' });
-      } else {
-        res.status(400).send({ msg: 'Server error', error: err.toString() });
-      }
-    }
-    res.status(200).send(response);
-  } else {
-    const category = await findCategoryByName(name);
-    let response;
-    if (category) {
-      try {
-        response = await allForksInCategory(category.id, limit, offset);
+  try {
+    const { name } = req.body;
+    if (!category) {
+      const response = await allForks(limit, offset);
+      res.status(200).send(response);
+    } else {
+      const foundCategory = await findCategoryByName(name);
+      let response;
+      if (foundCategory) {
+        response = await allForksInCategory(foundCategory.id, limit, offset);
         res.status(200).send(response);
-      } catch (err) {
-        if (!offset || !limit) {
-          res.status(400).send({ msg: 'Page not found in query' });
-        } else {
-          res.status(400).send({ msg: 'Server error', error: err.toString() });
-        }
-      }
-    } else res.status(404).send(`Category ${req.query.category} not found`);
+      } else res.status(404).send(`Category ${category} not found`);
+    }
+  } catch (err) {
+    if (typeof offset !== 'number' || typeof limit !== 'number') {
+      res.status(404).send({ msg: 'Page not found in query' });
+    } else if (!offset || !limit) {
+      res.status(404).send({ msg: 'Page not found in query' });
+    } else {
+      res.status(400).send({ msg: 'Server error', error: err.toString() });
+    }
   }
 };
 
